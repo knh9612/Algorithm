@@ -1,47 +1,47 @@
 import java.io.*;
 import java.util.*;
 
-// BufferedWriter를 StringBuffer로 변경
 public class Main {
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
 		int[] A = new int[N];
-		boolean result = true;
-		
 		for (int i = 0; i < N; i++) {
 			A[i] = Integer.parseInt(br.readLine());
 		}
 		Stack<Integer> st = new Stack<>();
-		int num = 1; // 살짝 포인터라고 생각하면 될 듯 -> 이것에 대한 정의? 이해가 완벽하면 앞으로도 좋을 듯...!
-		// 1부터 자연수를 증가시키면서 입력으로 주어진 숫자와 비교하여 증가시킨 자연수를 스택에 추가하는 방식으로 전개
-		
+		int num = 1; // 얘랑 A[]에 있는 값이랑 비교하면서 스택에 값을 넣었다 뺏다 할 예정
 		StringBuffer sf = new StringBuffer();
-		for (int i = 0; i < A.length; i++) {
-			int k = A[i]; // 현재 수열의 수
-			if (k >= num) { // k가 num 보다 같거나 크면 (같을 때도 push를 해야 하므로)
-				while (k >= num) { // num이 k와 같아질 때까지 push, num++
+		for (int i = 0; i < N; i++) {
+			int k = A[i];
+			// A[]의 값을 하나씩 빼서 num과 비교 후
+			// 1. k >= num이면 num이 k가 될 때까지 증가시키면서 num을 스택에 넣을 예정
+			
+			// 2. k < num이면 스택에서 pop... 근데 여기서 주의할 점이 있음
+			// pop한 값을 n이라고 했을 때, n과 A[i]의 값 즉 n과 k의 값을 비교해야 함
+			// 2-1. 출력해야 하는 값이 k인데, n > k이면 출력을 할 수가 없음!!!!!!! 
+			// 따라서 이 경우 "NO"를 출력해야 함
+			// 2-2. n < k인 경우는 "-" 출력 ????????
+			// -> 이렇게만 하면 완료ㅇㅇㅇ
+			// 다른 문제 풀어보면서 유형 익혀야 할 듯
+			if (k >= num) {
+				while (k >= num) {
 					st.push(num++);
-					// push 하면 +를 출력해야 하므로 일단 bw에 담아놓기
 					sf.append("+\n");
 				}
-				// num > k가 되면 가장 위에 있는 놈 출력
 				st.pop();
-				// pop 했으니 -를 bw에 담기
 				sf.append("-\n");
-			} else { // k < num 일 때, num이 k와 같아질 때까지 --해줘야 함
+			} else {
 				int n = st.pop();
-				// 스택의 가장 위의 수가 만들어야 하는 수열의 수보다 크면 수열을 출력할 수 없음
 				if (n > k) {
 					System.out.println("NO");
-					result = false;
-					break;
+					return;
 				} else {
 					sf.append("-\n");
-				}
+				}	
 			}
 		}
-		if (result) System.out.println(sf.toString());
+		System.out.println(sf.toString());
 	}
 }
