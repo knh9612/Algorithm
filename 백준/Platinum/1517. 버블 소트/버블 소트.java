@@ -16,7 +16,7 @@ public class Main {
 		for(int i = 1; i <= N; i++) {
 			A[i] = Integer.parseInt(st.nextToken());
 		}
-		count = 0;
+//		count = 0;
 		mergeSort(1, N);
 		System.out.println(count);
 	}
@@ -32,6 +32,9 @@ public class Main {
 		int index1 = s;
 		int index2 = m+1;
 		while(index1 <= m && index2 <= e) {
+			// 여기서 if문과 else문 내용의 위치를 바꾸면 틀렸음.... why?????
+			// 문제에서 수열에 중복된 수가 없다는 조건이 없었기 때문!!
+			// == 인 경우에 예외가 발생함!!
 			if (temp[index1] > temp[index2]) {
 				A[k] = temp[index2];
 				count += index2-k;
