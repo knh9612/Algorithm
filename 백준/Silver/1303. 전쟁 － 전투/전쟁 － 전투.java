@@ -6,8 +6,7 @@ import java.util.*;
 public class Main {
 	static int N, M;
 	static int[][] map;
-	static boolean[][] visitedWhite;
-	static boolean[][] visitedBlue;
+	static boolean[][] visited; // 얘를 2개를 만들어서 했었는데 그럴 필요 ㄴㄴㄴ
 	static int powerWhite;
 	static int powerBlue;
 	static int[] dx = {0, 0, -1, 1};
@@ -19,8 +18,7 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		map = new int[M][N];
-		visitedWhite = new boolean[M][N];
-		visitedBlue = new boolean[M][N];
+		visited = new boolean[M][N];
 		
 		for (int y = 0; y < M; y++) {
 			String[] str = br.readLine().split("");
@@ -36,12 +34,12 @@ public class Main {
 		int blue = 0;
 		for (int y = 0; y < M; y++) {
 			for (int x = 0; x < N; x++) {
-				if (map[y][x] == 0 && !visitedWhite[y][x]) {
+				if (map[y][x] == 0 && !visited[y][x]) {
 					powerWhite = 0;
 					dfs(y, x, 0);
 					white += powerWhite * powerWhite;
 				}
-				if (map[y][x] == 1 && !visitedBlue[y][x]) {
+				if (map[y][x] == 1 && !visited[y][x]) {
 					powerBlue = 0;
 					dfs(y, x, 1);
 					blue += powerBlue * powerBlue;
@@ -52,24 +50,16 @@ public class Main {
 	}
 	
 	static void dfs(int y, int x, int k) {
-		if (k == 0) {
-			visitedWhite[y][x] = true;
-			powerWhite++;
-		}
-		else {
-			visitedBlue[y][x] = true;
-			powerBlue++;
-		}
+			visited[y][x] = true;
+			if (k == 0) powerWhite++;
+			else if (k == 1) powerBlue++;
+	
 		for (int i = 0; i < 4; i++) {
 			int nx = x + dx[i];
 			int ny = y + dy[i];
-			if (0 <= nx && nx < N && 0 <= ny && ny < M) {
-				if (k == 0 && map[ny][nx] == 0 && !visitedWhite[ny][nx]) dfs(ny, nx, 0);
-				if (k == 1 && map[ny][nx] == 1 && !visitedBlue[ny][nx]) dfs(ny, nx, 1);
+			if (0 <= nx && nx < N && 0 <= ny && ny < M && map[ny][nx] == k && !visited[ny][nx]) {
+				dfs(ny, nx, k);
 			}
 		}
 	}
-	
-	
-	
 }
