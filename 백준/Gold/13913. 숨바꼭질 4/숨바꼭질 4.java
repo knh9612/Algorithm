@@ -54,10 +54,9 @@ public class Main {
 		}
 	}
 
-	// System.out.print 런타임 에러
-	// BufferedWriter 런타임 에러
-	// StringBuilder 런타임 에러
-	// 그럼 어케해 이걸;;;
+	// 출력 성능 문제가 아니라 위에서 system.out이 아니라 system.err를 사용;;;
+	
+	// 여기서 previous 배열에 전 위치를 담고 스택을 사용하여 경로를 출력하는 법 숙지하도록!
 	private static void printPath(int end) throws Exception {
 		Stack<Integer> s = new Stack<>(); // 경로 탐색은 스택!
 
