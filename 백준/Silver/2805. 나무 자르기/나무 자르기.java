@@ -15,13 +15,15 @@ public class Main {
 		}
 		Arrays.sort(A);
 
-		int start = 0;
+//		int start = A[0];
+		int start = 0; // 문제에서 나무의 높이가 0부터라고 주어졌기 때문에 0으로 변경
 		int end = A[n - 1];
 		int answer = 0;
 
 		while (start <= end) {
 			int mid_value = (start + end) / 2;
-			long sum = 0;
+//			int sum = 0;
+			long sum = 0; // 합을 long으로 변경하여 큰 값 처리!
 			for (int i = 0; i < n; i++) {
 				if (A[i] >= mid_value) {
 					sum += A[i] - mid_value;
@@ -34,7 +36,8 @@ public class Main {
 //			} else {
 //				answer = mid_value;
 //				break;
-			} else {
+			} else { // 아마 "적어도"라는 표현 때문에 이렇게 처리해야 할 듯!
+				// 다른 문제 풀어보면서 감 ㄱㄱ
 				answer = mid_value;
 				start = mid_value+1;
 			}
