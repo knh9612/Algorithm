@@ -21,7 +21,7 @@ public class Main {
             q.offer(i);
         }
 
-        List<Integer> josephus = josephus(q, K);
+        List<Integer> josephus = optimizedJosephus(q, K);
         sb.append("<");
         for (int i = 0; i < josephus.size(); i++) {
             sb.append(josephus.get(i));
@@ -33,17 +33,21 @@ public class Main {
         System.out.println(sb);
     }
 
-    public static List<Integer> josephus(Deque<Integer> q, int k) {
+    /**
+     * 요세푸스 순열 메서드 최적화.
+     */
+    public static List<Integer> optimizedJosephus(Deque<Integer> q, int k) {
         List<Integer> result = new ArrayList<>();
-        int count = 1;
         while (!q.isEmpty()) {
-            if (count % k != 0) {
+            // 매번 (k–1)번이 아니라 "(k–1) % 현재크기"번만 회전
+            int skip = (k - 1) % q.size();    // 실제로 회전해야 할 횟수
+            for (int i = 0; i < skip; i++) {
                 q.offer(q.poll());
-            } else {
-                result.add(q.poll());
             }
-            count++;
+            // 회전하고 무조건 poll()을 해주기 때문에 while문을 벗어나게 되므로 무한루프가 발생하지 않음.
+            result.add(q.poll());
         }
         return result;
     }
+
 }
