@@ -5,32 +5,32 @@ import java.util.*;
 
 public class Main {
 
+    /**
+     * 출력 최적화
+     */
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        StringBuilder sb = new StringBuilder();
+
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-
-        if (N == 1) {
-            System.out.println("<1>");
-            return;
-        }
 
         Deque<Integer> q = new LinkedList<>();
         for (int i = 1; i <= N; i++) {
             q.offer(i);
         }
 
-        List<Integer> jose = josephus(q, K);
-        for (int i = 0; i < jose.size(); i++) {
-            if (i == 0) {
-                System.out.print("<" + jose.get(i));
-            } else if (i != jose.size() - 1) {
-                System.out.print(", " + jose.get(i));
-            } else {
-                System.out.print(", " + jose.get(i) + ">");
+        List<Integer> josephus = josephus(q, K);
+        sb.append("<");
+        for (int i = 0; i < josephus.size(); i++) {
+            sb.append(josephus.get(i));
+            if (i < josephus.size() - 1) {
+                sb.append(", ");
             }
         }
+        sb.append(">");
+        System.out.println(sb);
     }
 
     public static List<Integer> josephus(Deque<Integer> q, int k) {
@@ -46,5 +46,4 @@ public class Main {
         }
         return result;
     }
-
 }
