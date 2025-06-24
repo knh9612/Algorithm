@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Collections;
 import java.util.PriorityQueue;
 
 public class Main {
@@ -7,38 +6,28 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // 0, 양수 저장
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder()); // 음수 저장
+        PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> {
+            int abs1 = Math.abs(o1);
+            int abs2 = Math.abs(o2);
+
+            if (abs1 != abs2) {
+                return Integer.compare(abs1, abs2); // 절댓값 비교
+            }
+            return Integer.compare(o1, o2); // 실제 값 비교
+        });
+
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         for (int i = 0; i < N; i++) {
             int k = Integer.parseInt(br.readLine());
-
-            if (k > 0) {
-                minHeap.add(k);
-            } else if (k < 0) {
-                maxHeap.add(k);
+            if (k == 0) {
+                if (pq.isEmpty()) bw.write(0 + "\n");
+                else bw.write(pq.poll() + "\n");
             } else {
-                if (minHeap.isEmpty() && maxHeap.isEmpty()) {
-                    bw.write(0 + "\n");
-                } else if (minHeap.isEmpty()) {
-                    bw.write(maxHeap.poll() + "\n");
-                } else if (maxHeap.isEmpty()) {
-                    bw.write(minHeap.poll() + "\n");
-                } else {
-                    int a = minHeap.peek();
-                    int b = -maxHeap.peek();
-
-                    if (a >= b) {
-                        bw.write(maxHeap.poll() + "\n");
-                    } else {
-                        bw.write(minHeap.poll() + "\n");
-                    }
-                }
-
+                pq.add(k);
             }
         }
-
+        
         bw.flush();
         bw.close();
     }
