@@ -11,7 +11,7 @@ public class Main {
         String tree;
         int total = 0;
 
-        while ((tree = br.readLine()) != null && !tree.isEmpty()) {
+        while ((tree = br.readLine()) != null) {
             tm.put(tree, tm.getOrDefault(tree, 0) + 1);
             total++;
         }
