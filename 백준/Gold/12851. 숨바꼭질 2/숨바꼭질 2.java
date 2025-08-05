@@ -1,57 +1,53 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-	static boolean[] visited;
-	static int[] distance;
-	static int[] ways;
-	static int n, k;
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken());
-		k = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-		if (n == k) {
-			System.out.println(0);
-			System.out.println(1);
-			return;
-		}
-		
-		visited = new boolean[100_001];
-		distance = new int[100_001];
-		ways = new int[100_001];
-		
-		dfs(n);
-		System.out.println(distance[k]);
-		System.out.println(ways[k]);
-		
-	}
-	
-	private static void dfs(int start) {
-		Queue<Integer> q = new LinkedList<>();
-		q.add(start);
-		visited[start] = true;
-		distance[start] = 0;
-		ways[start] = 1;
-		
-		while (!q.isEmpty()) {
-			int now = q.poll();
-			int[] A = {now-1, now+1, now*2};
-			for (int next : A) {
-				if (0<=next && next <=100_000) {
-					if (!visited[next]) {
-						q.add(next);
-						visited[next] = true;
-						distance[next] = distance[now] + 1;
-						ways[next] += ways[now];
-					}
-					else if (distance[next] == distance[now] + 1) {
-						ways[next] += ways[now];
-					}
-				}
-			}
-		}
-	}
+        int N = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
+        int MAX = 100_000;
+
+        Queue<Integer> queue = new ArrayDeque<>();
+        boolean[] visited = new boolean[MAX + 1];
+        int[] minDistance = new int[MAX + 1];
+        int[] ways = new int[MAX + 1];
+
+        // 시작점 예약
+        queue.add(N);
+        visited[N] = true;
+        ways[N] = 1;
+
+        while (!queue.isEmpty()) {
+            // 현재 노드 방문
+            int cur = queue.remove();
+
+            for (int next : new int[]{cur - 1, cur + 1, cur * 2}) {
+                // 다음 노드 예약
+                if (0 <= next && next <= MAX) {
+                    if (!visited[next]) {
+                        // 방문하지 않은 곳이라면 예약
+                        queue.add(next);
+                        visited[next] = true;
+                        minDistance[next] = minDistance[cur] + 1;
+                        ways[next] = ways[cur];
+
+                    } else if (minDistance[next] == minDistance[cur] + 1) {
+                        // 방문한 곳이고, 최단거리라면
+                        ways[next] += ways[cur];
+                    }
+                }
+            }
+        }
+
+        System.out.println(minDistance[K]);
+        System.out.println(ways[K]);
+    }
 }
