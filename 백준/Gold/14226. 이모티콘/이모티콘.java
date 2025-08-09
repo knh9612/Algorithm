@@ -11,7 +11,7 @@ public class Main {
         int S = Integer.parseInt(br.readLine());
 
         Queue<Node> queue = new ArrayDeque<>();
-        boolean[][] visited = new boolean[10000][10000];
+        boolean[][] visited = new boolean[1000 + 1][1000 + 1];
 
         // 현재 노드 예약
         queue.add(new Node(1, 0, 0, "0"));
@@ -31,18 +31,19 @@ public class Main {
                     new Node(cur.screen + cur.clipboard, cur.clipboard, cur.time + 1, "2"),
                     new Node(cur.screen - 1, cur.clipboard, cur.time + 1, "3")
             }) {
+                if (next.screen <= 1000 && next.clipboard <= 1000) {
+                    if (next.status.equals("1") && !visited[next.screen][next.clipboard]) {
+                        queue.add(next);
+                        visited[next.screen][next.clipboard] = true;
 
-                if (next.status.equals("1") && !visited[next.screen][next.clipboard]) {
-                    queue.add(next);
-                    visited[next.screen][next.clipboard] = true;
+                    } else if (next.status.equals("2") && next.clipboard > 0 && !visited[next.screen][next.clipboard]) {
+                        queue.add(next);
+                        visited[next.screen][next.clipboard] = true;
 
-                } else if (next.status.equals("2") && next.clipboard > 0 && !visited[next.screen][next.clipboard]) {
-                    queue.add(next);
-                    visited[next.screen][next.clipboard] = true;
-
-                } else if (next.status.equals("3") && next.screen >= 0 && !visited[next.screen][next.clipboard]) {
-                    queue.add(next);
-                    visited[next.screen][next.clipboard] = true;
+                    } else if (next.status.equals("3") && next.screen >= 0 && !visited[next.screen][next.clipboard]) {
+                        queue.add(next);
+                        visited[next.screen][next.clipboard] = true;
+                    }
                 }
             }
         }
