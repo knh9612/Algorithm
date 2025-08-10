@@ -9,12 +9,13 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int S = Integer.parseInt(br.readLine());
+        int MAX = 1000;
 
         Queue<Node> queue = new ArrayDeque<>();
-        boolean[][] visited = new boolean[1000 + 1][1000 + 1];
+        boolean[][] visited = new boolean[MAX + 1][MAX + 1];
 
-        // 현재 노드 예약
-        queue.add(new Node(1, 0, 0, "0"));
+        // 시작 노드 예약
+        queue.add(new Node(1, 0, 0));
         visited[1][0] = true;
 
         while (!queue.isEmpty()) {
@@ -26,40 +27,33 @@ public class Main {
             }
 
             // 다음 노드 예약
-            for (Node next : new Node[]{
-                    new Node(cur.screen, cur.screen, cur.time + 1, "1"),
-                    new Node(cur.screen + cur.clipboard, cur.clipboard, cur.time + 1, "2"),
-                    new Node(cur.screen - 1, cur.clipboard, cur.time + 1, "3")
-            }) {
-                if (next.screen <= 1000 && next.clipboard <= 1000) {
-                    if (next.status.equals("1") && !visited[next.screen][next.clipboard]) {
-                        queue.add(next);
-                        visited[next.screen][next.clipboard] = true;
+            if (!visited[cur.screen][cur.screen]) {
+                queue.add(new Node(cur.screen, cur.screen, cur.time + 1));
+                visited[cur.screen][cur.screen] = true;
 
-                    } else if (next.status.equals("2") && next.clipboard > 0 && !visited[next.screen][next.clipboard]) {
-                        queue.add(next);
-                        visited[next.screen][next.clipboard] = true;
+            }
+            if (0 <= cur.screen + cur.clipboard && cur.screen + cur.clipboard <= MAX && !visited[cur.screen + cur.clipboard][cur.clipboard]) {
+                queue.add(new Node(cur.screen + cur.clipboard, cur.clipboard, cur.time + 1));
+                visited[cur.screen + cur.clipboard][cur.clipboard] = true;
 
-                    } else if (next.status.equals("3") && next.screen >= 0 && !visited[next.screen][next.clipboard]) {
-                        queue.add(next);
-                        visited[next.screen][next.clipboard] = true;
-                    }
-                }
+            }
+            if (0 <= cur.screen - 1 && cur.screen - 1 <= MAX && !visited[cur.screen - 1][cur.clipboard]) {
+                queue.add(new Node(cur.screen - 1, cur.clipboard, cur.time + 1));
+                visited[cur.screen - 1][cur.clipboard] = true;
             }
         }
+
     }
-}
 
-class Node {
-    int screen;
-    int clipboard;
-    int time;
-    String status;
+    static class Node {
+        int screen;
+        int clipboard;
+        int time;
 
-    public Node(int screen, int clipboard, int time, String status) {
-        this.screen = screen;
-        this.clipboard = clipboard;
-        this.time = time;
-        this.status = status;
+        public Node(int screen, int clipboard, int time) {
+            this.screen = screen;
+            this.clipboard = clipboard;
+            this.time = time;
+        }
     }
 }
