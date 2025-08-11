@@ -13,10 +13,14 @@ public class Main {
 
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-
         int[][] map = new int[N][M];
+        int[] dx = {1, 0, -1, 0};
+        int[] dy = {0, 1, 0, -1};
+
+        // map 초기화
         for (int i = 0; i < N; i++) {
             String line = br.readLine();
+
             for (int j = 0; j < M; j++) {
                 map[i][j] = line.charAt(j) - '0';
             }
@@ -24,14 +28,11 @@ public class Main {
 
         Queue<Node> queue = new ArrayDeque<>();
         boolean[][][] visited = new boolean[N][M][2];
-        // 마지막은 벽을 부술 수 있는지 여부
-        // visited[][][0] = true => 이미 벽을 부순 상태에서 방문
-        // visited[][][1] = true => 아직 벽을 부수지 않은 상태에서 방문
-        int[] dx = {0, 0, -1, 1};
-        int[] dy = {-1, 1, 0, 0};
+        // visited[][][0] = true; 이미 벽을 부수고 방문
+        // visited[][][1] = true; 아직 벽을 부수지 않고 방문
 
         // 시작 노드 예약
-        queue.add(new Node(0, 0, 1, true));
+        queue.add(new Node(0, 0, 1, 1));
         visited[0][0][1] = true;
 
         while (!queue.isEmpty()) {
@@ -42,35 +43,31 @@ public class Main {
                 return;
             }
 
-            // 상하좌우가 범위 내이고
-            // map이 1일 때 canBreak이 0이 아니고
-            // visited가 true가 아닐 때만
-            // 큐에 추가
-            for (Node next : new Node[]{
-                    new Node(cur.x + dx[0], cur.y + dy[0], cur.distance + 1, cur.canBreak),
-                    new Node(cur.x + dx[1], cur.y + dy[1], cur.distance + 1, cur.canBreak),
-                    new Node(cur.x + dx[2], cur.y + dy[2], cur.distance + 1, cur.canBreak),
-                    new Node(cur.x + dx[3], cur.y + dy[3], cur.distance + 1, cur.canBreak)
-            }) {
-                if (0 <= next.x && next.x <= N - 1 && 0 <= next.y && next.y <= M - 1) {
-                    int state = next.canBreak ? 1 : 0;
-                    // 지나갈 수 있는 길일 때(벽을 부술 수 있는지 없는지에 대한 상태에 해당하는 방문 기록이 없어야 함)
-                    if (map[next.x][next.y] == 0 && !visited[next.x][next.y][state]) {
-                        queue.add(next);
-                        visited[next.x][next.y][state] = true;
+            // 다음 노드 예약
+            for (int i = 0; i < 4; i++) {
+                int nx = cur.x + dx[i];
+                int ny = cur.y + dy[i];
+
+                if (0 <= nx && nx < N && 0 <= ny && ny < M) {
+                    // 다음 칸이 0일 때
+                    // 벽을 부술 수 있는지 없는지 여부와 상관 없이 현재 상태에 해당하는 배열 방문 처리
+                    if (map[nx][ny] == 0 && !visited[nx][ny][cur.canBreak]) {
+                        queue.add(new Node(nx, ny, cur.distance + 1, cur.canBreak));
+                        visited[nx][ny][cur.canBreak] = true;
                     }
 
-                    // 지나갈 수 없는 길일 때(부술 수 있고, 이미 벽을 부순 상태에 해당하는 방문 기록이 없어야 함)
-                    else if (map[next.x][next.y] == 1 && next.canBreak && !visited[next.x][next.y][0]) {
-                            next.canBreak = false;
-                            queue.add(next);
-                            visited[next.x][next.y][0] = true;
+                    // 다음 칸이 1일 때
+                    // 부술 수 있어야 함(canBreak = 1 && visited[][][0] = false 이어야 부술 수 있음)
+                    else if (map[nx][ny] == 1 && cur.canBreak == 1 && !visited[nx][ny][0]) {
+                        queue.add(new Node(nx, ny, cur.distance + 1, 0));
+                        visited[nx][ny][0] = true;
+                        // 부수고 이동하므로 canBreak = 0 && visited[][][0] = true
                     }
-
                 }
-
             }
+
         }
+
         System.out.println(-1);
 
     }
@@ -79,9 +76,9 @@ public class Main {
         int x;
         int y;
         int distance;
-        boolean canBreak;
+        int canBreak; // 부술 수 있으면 1, 없으면 0
 
-        public Node(int x, int y, int distance, boolean canBreak) {
+        public Node(int x, int y, int distance, int canBreak) {
             this.x = x;
             this.y = y;
             this.distance = distance;
