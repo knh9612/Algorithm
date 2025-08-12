@@ -8,18 +8,16 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-
         int N = Integer.parseInt(st.nextToken()); // 도시의 개수
         int M = Integer.parseInt(st.nextToken()); // 도로의 개수
         int K = Integer.parseInt(st.nextToken()); // 거리 정보
-        int X = Integer.parseInt(st.nextToken()); // 출발 도시 번호
+        int X = Integer.parseInt(st.nextToken()); // 출발 도시의 번호
 
-        // 인접 리스트 초기화
+        // graph 초기화
         List<List<Integer>> graph = new ArrayList<>();
         for (int i = 0; i <= N; i++) {
             graph.add(new ArrayList<>());
         }
-
         // 단방향 간선 추가
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
@@ -44,10 +42,13 @@ public class Main {
             int cur = queue.remove();
             if (distance[cur] == K) {
                 answer.add(cur);
+                // 추가 노드는 최단 거리가 아니므로 통과
+                continue;
             }
 
+            // 다음 노드 예약
             for (int next : graph.get(cur)) {
-                if (!visited[next]) {
+                if (1 <= next && next <= N && !visited[next]) {
                     queue.add(next);
                     visited[next] = true;
                     distance[next] = distance[cur] + 1;
@@ -55,14 +56,14 @@ public class Main {
             }
         }
 
-        Collections.sort(answer);
         if (answer.isEmpty()) {
             System.out.println(-1);
+            return;
         }
+        
+        Collections.sort(answer);
         for (int i : answer) {
             System.out.println(i);
         }
-
-
     }
 }
