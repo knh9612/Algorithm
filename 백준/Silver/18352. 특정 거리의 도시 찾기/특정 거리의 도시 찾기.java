@@ -13,12 +13,13 @@ public class Main {
         int K = Integer.parseInt(st.nextToken()); // 거리 정보
         int X = Integer.parseInt(st.nextToken()); // 출발 도시의 번호
 
-        // graph 초기화
+        // 그래프 초기화
         List<List<Integer>> graph = new ArrayList<>();
         for (int i = 0; i <= N; i++) {
             graph.add(new ArrayList<>());
         }
-        // 단방향 간선 추가
+
+        // 단방향 간선 설정
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             int A = Integer.parseInt(st.nextToken());
@@ -32,7 +33,7 @@ public class Main {
         int[] distance = new int[N + 1];
         List<Integer> answer = new ArrayList<>();
 
-        // 시작 노드 예약
+        // 처음 노드 예약
         queue.add(X);
         visited[X] = true;
         distance[X] = 0;
@@ -42,13 +43,11 @@ public class Main {
             int cur = queue.remove();
             if (distance[cur] == K) {
                 answer.add(cur);
-                // 추가 노드는 최단 거리가 아니므로 통과
                 continue;
             }
 
-            // 다음 노드 예약
             for (int next : graph.get(cur)) {
-                if (1 <= next && next <= N && !visited[next]) {
+                if (!visited[next]) {
                     queue.add(next);
                     visited[next] = true;
                     distance[next] = distance[cur] + 1;
@@ -60,7 +59,7 @@ public class Main {
             System.out.println(-1);
             return;
         }
-        
+
         Collections.sort(answer);
         for (int i : answer) {
             System.out.println(i);
