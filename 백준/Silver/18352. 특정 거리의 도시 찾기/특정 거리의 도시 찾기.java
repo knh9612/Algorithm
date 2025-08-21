@@ -11,9 +11,9 @@ public class Main {
         int N = Integer.parseInt(st.nextToken()); // 도시의 개수
         int M = Integer.parseInt(st.nextToken()); // 도로의 개수
         int K = Integer.parseInt(st.nextToken()); // 거리 정보
-        int X = Integer.parseInt(st.nextToken()); // 출발 도시의 번호
+        int X = Integer.parseInt(st.nextToken()); // 출발 도시 번호
 
-        // 그래프 초기화
+        // graph 초기화
         List<List<Integer>> graph = new ArrayList<>();
         for (int i = 0; i <= N; i++) {
             graph.add(new ArrayList<>());
@@ -33,10 +33,9 @@ public class Main {
         int[] distance = new int[N + 1];
         List<Integer> answer = new ArrayList<>();
 
-        // 처음 노드 예약
+        // 시작 노드 설정
         queue.add(X);
         visited[X] = true;
-        distance[X] = 0;
 
         while (!queue.isEmpty()) {
             // 현재 노드 방문
@@ -57,7 +56,6 @@ public class Main {
 
         if (answer.isEmpty()) {
             System.out.println(-1);
-            return;
         }
 
         Collections.sort(answer);
