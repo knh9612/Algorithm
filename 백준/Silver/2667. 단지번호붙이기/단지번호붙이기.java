@@ -1,56 +1,67 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Main {
-	static int[][] map;
-	static boolean[][] visited;
-	static int[] dx = {0, 0, -1, 1};
-	static int[] dy = {-1, 1, 0, 0};
-	static int size;
-	static int N;
-	
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		N = Integer.parseInt(br.readLine());
-		map = new int[N][N];
-		visited = new boolean[N][N];
-		
-		for (int y = 0; y < N; y++) {
-			String[] str = br.readLine().split("");
-			for (int x = 0; x < N; x++) {
-				map[y][x] = Integer.parseInt(str[x]); 
-			}
-		}
-		
-		List<Integer> areaSizes = new ArrayList<>();
-		
-		for (int y = 0; y < N; y++) {
-			for (int x = 0; x < N; x++) {
-				if (map[y][x] == 1 && !visited[y][x]) {
-					size = 0;
-					dfs(y, x);
-					areaSizes.add(size);
-				}
-			}
-		}
-		Collections.sort(areaSizes);
-		System.out.println(areaSizes.size());
-		for (int i : areaSizes) {
-			System.out.println(i);
-		}
+    static int[][] map;
+    static boolean[][] visited;
+    static int[] dx;
+    static int[] dy;
+    static int N;
 
-	}
-	
-	static void dfs (int y, int x) {
-		visited[y][x] = true;
-		size++;
-		for (int i = 0; i < 4; i++) {
-			int nx = x + dx[i];
-			int ny = y + dy[i];
-			
-			if (0 <= nx && nx < N && 0 <= ny && ny < N && !visited[ny][nx] && map[ny][nx] == 1) {
-				dfs(ny, nx);
-			}
-		}
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        map = new int[N][N];
+        dx = new int[]{1, 0, -1, 0};
+        dy = new int[]{0, 1, 0, -1};
+
+        for (int i = 0; i < N; i++) {
+            String line = br.readLine();
+            for (int j = 0; j < N; j++) {
+                map[i][j] = line.charAt(j) - '0';
+            }
+        }
+
+        visited = new boolean[N][N];
+        int count = 0;
+        List<Integer> answer = new ArrayList<>();
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (map[i][j] == 1 && !visited[i][j]) {
+                    count++;
+                    answer.add(dfs(i, j));
+                }
+            }
+        }
+
+        System.out.println(count);
+        Collections.sort(answer);
+        for (int i : answer) {
+            System.out.println(i);
+        }
+        
+    }
+
+    static int dfs(int x, int y) {
+        // 현재 노드 방문
+        visited[x][y] = true;
+        int count = 1;
+
+        // 다음 노드 탐색
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            if (0<= nx && nx < N && 0<= ny && ny < N && map[nx][ny] == 1 && !visited[nx][ny]) {
+                count += dfs(nx, ny);
+            }
+        }
+        return count;
+    }
+
 }
