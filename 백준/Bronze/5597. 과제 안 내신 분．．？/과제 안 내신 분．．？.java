@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
 public class Main {
 
@@ -15,16 +13,19 @@ public class Main {
             arr[k] = 1;
         }
 
-        List<Integer> answer = new ArrayList<>();
+        int[] answer = new int[2];
+        int count = 0;
         for (int i = 1; i <= 30; i++) {
             if (arr[i] == 0) {
-                answer.add(i);
+                answer[count] = i;
+                count++;
             }
         }
 
-        Collections.sort(answer);
+        Arrays.sort(answer);
         for (int i : answer) {
             System.out.println(i);
         }
+
     }
 }
