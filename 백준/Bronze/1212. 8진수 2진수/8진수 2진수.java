@@ -1,35 +1,38 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String octal = br.readLine();
-
-        // 0 예외 처리
         if (octal.equals("0")) {
             System.out.println(0);
             return;
         }
 
+        int[] arr = new int[octal.length()];
+        for (int i = 0; i < octal.length(); i++) {
+            arr[i] = octal.charAt(i) - '0';
+        }
+
         StringBuilder sb = new StringBuilder();
-
-        // 첫 번째 숫자는 앞자리 0 제거 위해 별도 처리
-        int first = octal.charAt(0) - '0';
-        sb.append(Integer.toBinaryString(first));
-
-        // 나머지 숫자들은 반드시 3자리 이진수로 변환
-        for (int i = 1; i < octal.length(); i++) {
-            int num = octal.charAt(i) - '0';
-            String bin = Integer.toBinaryString(num);
-            // 3자리가 안 되면 앞에 0을 채움
-            while (bin.length() < 3) {
-                bin = "0" + bin;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            for (int j = 0; j < 3; j++) {
+                sb.append(arr[i] % 2);
+                arr[i] /= 2;
             }
-            sb.append(bin);
+        }
+
+        sb.reverse();
+
+        while ((sb.charAt(0) - '0') == 0) {
+            sb.deleteCharAt(0);
         }
 
         System.out.println(sb);
+
     }
 }
