@@ -24,7 +24,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < 5; j++) {
                 check(Integer.parseInt(st.nextToken()));
-                if (isBingo() >= 3) {
+                if (i * 5 + (j + 1) >= 12 && isBingo() >= 3) {
                     System.out.println(i * 5 + (j + 1));
                     return;
                 }
