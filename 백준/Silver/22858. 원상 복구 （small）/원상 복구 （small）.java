@@ -25,7 +25,7 @@ public class Main {
             D[i + 1] = Integer.parseInt(st.nextToken());
         }
 
-        int[] P = new int[1_1000_001];
+        int[] P = new int[1_000_001];
         for (int i = 0; i < K; i++) {
 
             for (int j = 1; j <= N; j++) {
