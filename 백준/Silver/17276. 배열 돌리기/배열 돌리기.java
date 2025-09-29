@@ -23,10 +23,10 @@ public class Main {
                 }
             }
 
-            if (d > 0) {
-                graphRotate(graph, d);
+            if (d == 0 || Math.abs(d / 45) == 0) {
 
-            } else if (d == 0) {
+            } else if (d > 0) {
+                graphRotate(graph, d);
 
             } else {
                 graphReverseRotate(graph, d);
