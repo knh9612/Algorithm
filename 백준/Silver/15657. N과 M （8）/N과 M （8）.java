@@ -25,24 +25,22 @@ public class Main {
         }
 
         Arrays.sort(arr);
-        dfs(0);
+        dfs(0, 0);
 
         System.out.println(sb);
 
     }
 
-    static void dfs(int depth) {
+    static void dfs(int start, int depth) {
         if (depth == M) {
             for (int i : answer) sb.append(i).append(" ");
             sb.append("\n");
             return;
         }
 
-        for (int i = 0; i < N; i++) {
-            if (depth >= 1 && answer[depth - 1] > arr[i]) continue;
-            
+        for (int i = start; i < N; i++) {
             answer[depth] = arr[i];
-            dfs(depth + 1);
+            dfs(i, depth + 1);
 
         }
     }
