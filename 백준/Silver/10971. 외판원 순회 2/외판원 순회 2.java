@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 public class Main {
     static int N;
     static int[][] graph;
-    static int[] answer;
     static boolean[] visited;
     static int minCost = 10_000_000;
 
@@ -16,7 +15,6 @@ public class Main {
 
         graph = new int[N + 1][N + 1];
         visited = new boolean[N + 1];
-        answer = new int[N];
 
         for (int i = 1; i <= N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
@@ -25,33 +23,25 @@ public class Main {
             }
         }
 
-        backtrack(0);
+        visited[1] = true;
+        backtrack(1, 1, 0, 1);
         System.out.println(minCost);
     }
 
-    static void backtrack(int depth) {
+    static void backtrack(int start, int cur, int cost, int depth) {
         // 종료 조건
         if (depth == N) {
-            int cost = 0;
-            // 거리 계산
-            for (int i = 0; i < N - 1; i++) {
-                if (graph[answer[i]][answer[i + 1]] == 0) return;
-                cost += graph[answer[i]][answer[i + 1]];
-            }
-
-            if (graph[answer[N - 1]][answer[0]]== 0) return;
-            cost += graph[answer[N - 1]][answer[0]];
-            minCost = Math.min(minCost, cost);
-
+            if (graph[cur][start] == 0) return;
+            minCost = Math.min(minCost, cost + graph[cur][start]);
             return;
         }
 
         for (int i = 1; i <= N; i++) {
-            if (visited[i]) continue;
+            if (visited[i] || graph[cur][i] == 0) continue;
+            if (cost + graph[cur][i] > minCost) continue;
 
             visited[i] = true;
-            answer[depth] = i;
-            backtrack(depth + 1);
+            backtrack(start, i, cost + graph[cur][i], depth + 1);
             visited[i] = false;
 
         }
