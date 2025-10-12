@@ -48,6 +48,7 @@ public class Main {
                 else if (op == 1) result -= arr[i + 1];
                 else if (op == 2) result *= arr[i + 1];
                 else result /= arr[i + 1];
+                if (result > 1_000_000_000 || result < -1_000_000_000) break;
             }
             max = Math.max(result, max);
             min = Math.min(result, min);
