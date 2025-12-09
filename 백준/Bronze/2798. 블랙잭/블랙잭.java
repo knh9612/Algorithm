@@ -7,7 +7,6 @@ public class Main {
     static int N, M;
     static int max = Integer.MIN_VALUE;
     static int[] arr;
-    static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,25 +20,20 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        visited = new boolean[N];
-        dfs(0, 0);
+        dfs(0, 0, 0);
         System.out.println(max);
 
     }
 
-    static void dfs(int depth, int sum) {
+    static void dfs(int depth, int start, int sum) {
         if (depth == 3) {
             max = Math.max(max, sum);
             return;
         }
 
-        for (int i = 0; i < N; i++) {
-            if (!visited[i]) {
-                visited[i] = true;
-                if (sum + arr[i] <= M) {
-                    dfs(depth + 1, sum + arr[i]);
-                }
-                visited[i] = false;
+        for (int i = start; i < N; i++) {
+            if (sum + arr[i] <= M) {
+                dfs(depth + 1, i + 1, sum + arr[i]);
             }
         }
     }
