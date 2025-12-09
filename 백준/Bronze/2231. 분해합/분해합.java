@@ -9,7 +9,8 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
 
         int answer = 0;
-        for (int i = 1; i <= N; i++) {
+        int start = N - String.valueOf(N).length() * 9;
+        for (int i = start; i <= N; i++) {
             int k = i;
             int sum = k;
 
