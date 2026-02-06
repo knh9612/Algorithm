@@ -11,20 +11,16 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        int count = Integer.parseInt(br.readLine());
-        int n = Integer.parseInt(br.readLine());
+        int N = Integer.parseInt(br.readLine());
+        int M = Integer.parseInt(br.readLine());
 
-        // 그래프 초기화
         graph = new ArrayList<>();
-        for (int i = 0; i <= count; i++) {
+        for (int i = 0; i <= N; i++) {
             graph.add(new ArrayList<>());
         }
 
-        visited = new boolean[count + 1];
-
-        // 양방향 간선 설정
-        for (int i = 0; i < n; i++) {
+        StringTokenizer st;
+        for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             int A = Integer.parseInt(st.nextToken());
             int B = Integer.parseInt(st.nextToken());
@@ -33,20 +29,21 @@ public class Main {
             graph.get(B).add(A);
         }
 
-        System.out.println(dfs(1) - 1);
+        visited = new boolean[N + 1];
+        System.out.println(dfs(1));
 
     }
 
-    static int dfs(int cur) {
-        // 현재 노드 방문
+    public static int dfs(int cur) {
         visited[cur] = true;
 
-        int count = 1;
+        int count = 0;
         for (int next : graph.get(cur)) {
             if (!visited[next]) {
-                count += dfs(next);
+                count += 1 + dfs(next);
             }
         }
+
         return count;
     }
 }
