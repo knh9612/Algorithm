@@ -4,12 +4,16 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
+    static int N;
+    static List<List<Integer>> graph;
+    static boolean[] visited;
+    static int[] prev;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
 
-        List<List<Integer>> graph = new ArrayList<>();
+        graph = new ArrayList<>();
         for (int i = 0; i <= N; i++) {
             graph.add(new ArrayList<>());
         }
@@ -23,12 +27,20 @@ public class Main {
             graph.get(B).add(A);
         }
 
-        Queue<Integer> queue = new ArrayDeque<>();
-        boolean[] visited = new boolean[N + 1];
-        int[] answer = new int[N + 1];
+        visited = new boolean[N + 1];
+        prev = new int[N + 1];
 
-        queue.offer(1);
-        visited[1] = true;
+        bfs(1);
+
+        for (int i = 2; i <= N; i++) {
+            System.out.println(prev[i]);
+        }
+    }
+
+    private static void bfs(int start) {
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.add(start);
+        visited[start] = true;
 
         while (!queue.isEmpty()) {
             int cur = queue.poll();
@@ -36,14 +48,12 @@ public class Main {
             for (int next : graph.get(cur)) {
                 if (!visited[next]) {
                     queue.offer(next);
+                    prev[next] = cur;
                     visited[next] = true;
-                    answer[next] = cur;
                 }
             }
+
         }
 
-        for (int i = 2; i <= N; i++) {
-            System.out.println(answer[i]);
-        }
     }
 }
