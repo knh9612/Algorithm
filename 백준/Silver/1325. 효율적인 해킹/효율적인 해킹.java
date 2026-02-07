@@ -13,64 +13,64 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
-        // graph 초기화
         graph = new ArrayList<>();
         for (int i = 0; i <= N; i++) {
             graph.add(new ArrayList<>());
         }
 
-        // 단방향 간선 설정
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            int A = Integer.parseInt(st.nextToken()); // 해킹할 수 있는 컴퓨터
-            int B = Integer.parseInt(st.nextToken()); // 컴퓨터 번호
+            int A = Integer.parseInt(st.nextToken());
+            int B = Integer.parseInt(st.nextToken());
 
             graph.get(B).add(A);
         }
 
-        int[] result = new int[N + 1];
+        int max = -1;
+        int[] count = new int[N + 1];
+
         for (int i = 1; i <= N; i++) {
             visited = new boolean[N + 1];
-            result[i] = bfs(i);
+            count[i] = bfs(i);
+            max = Math.max(max, count[i]);
         }
 
-        // 최댓값 찾기
-        int max = result[1];
-        for (int i = 2; i <= N; i++) {
-            if (result[i] > max) {
-                max = result[i];
-            }
-        }
 
-        List<Integer> answer = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= N; i++) {
-            if (result[i] == max) {
-                answer.add(i);
+            if (count[i] == max) {
+                sb.append(i).append(" ");
             }
         }
 
-        Collections.sort(answer);
-        for (int i : answer) {
-            System.out.print(i + " ");
-        }
+        System.out.print(sb);
+
     }
 
-    static int bfs(int start) {
+    private static int dfs(int cur) {
+        visited[cur] = true;
+
+        int count = 1;
+        for (int next : graph.get(cur)) {
+            if (!visited[next]) {
+                count += dfs(next);
+            }
+        }
+        return count;
+    }
+
+    private static int bfs(int start) {
         Queue<Integer> queue = new ArrayDeque<>();
-        // 현재 노드 예약
-        queue.add(start);
+        queue.offer(start);
         visited[start] = true;
 
         int count = 1;
-
         while (!queue.isEmpty()) {
-            // 현재 노드 방문
-            int cur = queue.remove();
+            int cur = queue.poll();
 
-            // 다음 노드 탐색
             for (int next : graph.get(cur)) {
                 if (!visited[next]) {
-                    queue.add(next);
+                    queue.offer(next);
                     visited[next] = true;
                     count++;
                 }
@@ -78,5 +78,4 @@ public class Main {
         }
         return count;
     }
-
 }
