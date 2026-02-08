@@ -10,6 +10,8 @@ public class Main {
     static int[][] graph;
     static int[][] answer;
     static int[] start;
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -61,9 +63,6 @@ public class Main {
         answer[start[0]][start[1]] = 0;
 
         while (!queue.isEmpty()) {
-            int[] dx = {0, 1, 0, -1};
-            int[] dy = {1, 0, -1, 0};
-
             int[] cur = queue.poll();
 
             for (int i = 0; i < 4; i++) {
