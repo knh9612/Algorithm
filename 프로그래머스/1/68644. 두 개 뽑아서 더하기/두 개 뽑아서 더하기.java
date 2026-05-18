@@ -12,13 +12,9 @@ class Solution {
             }
         }
         
-        List<Integer> list = new ArrayList<>(set);
-        int[] answer = new int[list.size()];
-        Collections.sort(list);
-        
-        for (int i = 0; i < list.size(); i++) {
-            answer[i] = list.get(i);
-        }
-        return answer;
+        return set.stream()
+                .sorted()
+                .mapToInt(Integer::intValue)
+                .toArray();
     }
 }
