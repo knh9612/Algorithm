@@ -36,7 +36,7 @@ class Solution {
             if (max < scores[i]) max = scores[i];
         }
         
-        List<Integer> list = new LinkedList<>();
+        List<Integer> list = new ArrayList<>();
         for (int i = 0; i < scores.length; i++) {
             if (max == scores[i]) list.add(i + 1);
         }
