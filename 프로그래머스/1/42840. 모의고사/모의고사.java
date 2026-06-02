@@ -1,49 +1,44 @@
 import java.util.*;
 
-// 20시 시작
 class Solution {
-    public List<Integer> solution(int[] answers) {
-        int[] first = {1, 2, 3, 4, 5};
-        int[] second = {2, 1, 2, 3, 2, 4, 2, 5};
-        int[] third = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+
+    public int[] solution(int[] answers) {
+        // 각 수포자의 반복 패턴
+        int[] pattern1 = {1, 2, 3, 4, 5};
+        int[] pattern2 = {2, 1, 2, 3, 2, 4, 2, 5};
+        int[] pattern3 = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+
+        // 정답 수를 저장하는 배열 선언
         int[] scores = new int[3];
-        
-        // 1번 수포자가 찍는 방식
+
+        // 문제 풀이
         for (int i = 0; i < answers.length; i++) {
-            if (answers[i] == first[i % first.length]) {
+            if (answers[i] == pattern1[i % pattern1.length]) {
                 scores[0]++;
             }
-        }
-        
-        // 2번 수포자가 찍는 방식
-        for (int i = 0; i < answers.length; i++) {
-            if (answers[i] == second[i % second.length]) {
+
+            if (answers[i] == pattern2[i % pattern2.length]) {
                 scores[1]++;
             }
-        }
 
-        
-        // 3번 수포자가 찍는 방식
-        for (int i = 0; i < answers.length; i++) {
-            if (answers[i] == third[i % third.length]) {
+            if (answers[i] == pattern3[i % pattern3.length]) {
                 scores[2]++;
             }
         }
 
-        // 가장 높은 점수를 받은 사람 찾기
-        int max = -1;
-        for (int i = 0; i < scores.length; i++) {
-            if (max < scores[i]) max = scores[i];
+        // 최고 득점 찾기
+        int maxScore = -1;
+        for (int score : scores) {
+            if (score > maxScore) maxScore = score;
         }
-        
-        List<Integer> list = new ArrayList<>();
+
+        // 최고 득점자 찾기
+        List<Integer> answer = new ArrayList<>();
         for (int i = 0; i < scores.length; i++) {
-            if (max == scores[i]) list.add(i + 1);
+            if (scores[i] == maxScore) answer.add(i + 1);
         }
-        
-        Collections.sort(list);
-        
-        return list;
+
+        return answer.stream().mapToInt(Integer::intValue).toArray();
+
     }
-    
 }
