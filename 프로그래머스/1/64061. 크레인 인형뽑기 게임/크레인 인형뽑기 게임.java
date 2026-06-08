@@ -1,30 +1,42 @@
 import java.util.*;
 
-// 22시 10분 시작
 class Solution {
     public int solution(int[][] board, int[] moves) {
-        Deque<Integer> stack = new ArrayDeque<>();
-        int answer = 0;
-        
-        for (int i = 0; i < moves.length; i++) {
-            for (int r = 0; r < board.length; r++) {
-                if (board[r][moves[i] - 1] == 0) continue;
-                
-                if (!stack.isEmpty() && stack.peek() == board[r][moves[i] - 1]) {
-                    stack.pop();
-                    answer += 2;
-                    
-                } else {
-                    stack.push(board[r][moves[i] - 1]);                
-                }
-                
-                board[r][moves[i] - 1] = 0;
-                break;
+        // 2차원 배열을 (index, stack)의 map으로 변환
+        Map<Integer, Deque<Integer>> map = new HashMap<>();
+
+        int rowLength = board.length;
+        int columnLength = board[0].length;
+
+        for (int i = 0; i < columnLength; i++) {
+            Deque<Integer> stack = new ArrayDeque<>();
+            for (int j = rowLength - 1; j >= 0; j--) {
+                if (board[j][i] == 0) continue;
+
+                stack.push(board[j][i]);
             }
-            
+            map.put(i + 1,  stack);
+        }
+
+        // moves에 따라 인형 뽑기 진행
+        // 인형 뽑기 시 사라진 인형 개수 count
+        Deque<Integer> bucket = new ArrayDeque<>();
+        int answer = 0;
+        for (int move : moves) {
+            Deque<Integer> stack = map.get(move);
+            if (stack.isEmpty()) continue;
+
+            int input = stack.pop();
+            if (!bucket.isEmpty() && bucket.peek() == input) {
+                bucket.pop();
+                answer += 2;
+
+            } else {
+                bucket.push(input);
+            }
         }
         
-        
         return answer;
+
     }
 }
